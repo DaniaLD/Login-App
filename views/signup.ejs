@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Signup</title>
+</head>
+<body>
+<div class="container">
+    <% include ./partials/header.ejs%>
+    <div class="row">
+        <% if(errors) {
+                errors.forEach(function(error) { %>
+        <div class="alert alert-danger col-lg-12"><%= error.msg %></div>
+        <% })} %>
+
+        <% if(error_msg.length) { %>
+        <div class="alert alert-danger col-lg-12"><%= error_msg %></div>
+        <% } %>
+    </div>
+    <div class="row">
+        <div class="col-lg-12" style="margin-bottom: 40px;text-align: center;">
+            <h1><i class="fa fa-user" aria-hidden="true"></i> Signup</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <form action="/signup" method="post" class="col-lg-6" style="margin-bottom: 40px;">
+            <div class="form-group">
+                <lable>Name</lable>
+                <input type="text" name="name" class="form-control">
+            </div>
+            <div class="form-group">
+                <lable>Username</lable>
+                <input type="text" name="username" class="form-control">
+            </div>
+            <div class="form-group">
+                <lable>Email</lable>
+                <input type="email" name="email" class="form-control">
+            </div>
+            <div class="form-group">
+                <lable>Password</lable>
+                <input type="password" name="password" class="form-control">
+            </div>
+            <div class="form-group">
+                <lable>Confirm Password</lable>
+                <input type="password" name="confirmPassword" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-success">Signin</button>
+        </form>
+        <div class="col-log-3"></div>
+    </div>
+
+    <footer class="footer col-lg-12" style="text-align: center;">
+        <p>&copy; 2017 , Login app by DANIAL:D</p>
+    </footer>
+</div>
+
+<% include ./partials/scripts.ejs %>
+</body>
+</html>
