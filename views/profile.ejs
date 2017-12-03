@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <% include ./partials/head.ejs %>
+    <title>Home</title>
+</head>
+<body>
+<div class="container">
+    <% include ./partials/header.ejs%>
+    <div class="row">
+        <div class="col-lg-12" style="margin-bottom: 40px;text-align: center;">
+            <h1>Welocme to your profile, dear <%= user.username %></h1>
+        </div>
+    </div>
+
+    <footer class="footer col-lg-12" style="text-align: center;">
+        <p>&copy; 2017 , Login app by DANIAL:D</p>
+    </footer>
+</div>
+
+<% include ./partials/scripts.ejs %>
+</body>
+</html>

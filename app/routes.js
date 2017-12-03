@@ -17,9 +17,15 @@ module.exports = function(app, passport) {
         res.render('login');
     });
 
+    app.post('/login', passport.authenticate('local-login', {
+        failureRedirect: '/login',
+        successRedirect: '/profile',
+        failureFlash: true
+    }));
+
     // Signup page
     app.get('/signup', function(req, res) {
-        res.render('signup', { errors: null });
+        res.render('signup', {errors: null});
     });
 
     app.post('/signup', function(req, res) {
@@ -40,7 +46,7 @@ module.exports = function(app, passport) {
         // Check if there are any users with this email
         User.findOne({'email': email}).then(function(found) {
             if(found) {
-                req.flash('error_msg', 'Emial is token.');
+                req.flash('error_msg', 'Email is token!');
                 res.redirect('/signup');
             } else {
                 if(errors) {
@@ -59,7 +65,6 @@ module.exports = function(app, passport) {
                         } else {
                             console.log('User created successfully ...');
                         }
-
                         req.flash('success_msg', 'You signed up successfully, now can login');
                         res.redirect('/login');
                     })
@@ -67,38 +72,18 @@ module.exports = function(app, passport) {
 
             }
         });
-        // if(errors) {
-        //     res.render('signup', { errors: errors });
-        // } else {
-        //     let user = new User({
-        //         name: name,
-        //         username: username,
-        //         email: email,
-        //         password: password
-        //     });
-        //
-        //     User.hashPassword(user, function(err) {
-        //         if(err) {
-        //             console.log('Did not create user !!! -> ' + err);
-        //         } else {
-        //             console.log('User created successfully ...');
-        //         }
-        //
-        //         req.flash('success_msg', 'You signed up successfully, now can login');
-        //         res.redirect('/login');
-        //     })
-        // }
     });
 
     // Profile page
     app.get('/profile', isLoggedin, function(req, res) {
-        res.render('profile');
+        res.render('profile', {user: req.user});
     });
 
     // Logout
     app.get('/logout', function(req, res) {
         req.logout();
-        res.redirect('/login', { message: req.flash('success_msg', 'You are logged out.') });
+        req.flash('success_msg', 'You are logged out.');
+        res.redirect('/login');
     });
 };
 
@@ -106,6 +91,7 @@ function isLoggedin(req, res, next) {
     if(req.isAuthenticated()) {
         return next();
     } else {
-        res.redirect('/login', { message: req.flash('error_msg', 'You need to login first!') });
+        req.flash('error_msg', 'You need to login first!');
+        res.redirect('/login');
     }
 }
