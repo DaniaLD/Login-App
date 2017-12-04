@@ -79,6 +79,22 @@ module.exports = function(app, passport) {
         res.render('profile', {user: req.user});
     });
 
+    // Edit profile
+    app.get('/profile/edit', isLoggedin, function(req, res) {
+       res.render('edit-profile', {user: req.user});
+    });
+
+    app.post('/profile/edit', function(req, res) {
+        let query = {'email': req.user.email};
+        User.updateOne(query, {$set: {'name': req.body.name, 'username': req.body.username}} ,function(err) {
+            if(err) throw err;
+            console.log('User information changed successfully ...');
+        });
+
+        req.flash('success_msg', 'Changes saved successfully.');
+        res.redirect('/profile');
+    });
+
     // Logout
     app.get('/logout', function(req, res) {
         req.logout();

@@ -7,10 +7,27 @@
 <body>
 <div class="container">
     <% include ./partials/header.ejs%>
+    <% if(success_msg.length) { %>
+    <div class="alert alert-success col-lg-12" style="text-align: center;"><%= success_msg %></div>
+    <% } %>
     <div class="row">
-        <div class="col-lg-12" style="margin-bottom: 40px;text-align: center;">
-            <h1>Welocme to your profile, dear <%= user.username %></h1>
+        <div class="col-lg-12" style="margin-bottom: 40px;">
+            <h1>Profile</h1>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">Name :</div>
+        <div class="col-lg-8"><%= user.name %></div>
+        <div class="col-lg-4">Username :</div>
+        <div class="col-lg-8"><%= user.username %></div>
+        <div class="col-lg-4">email :</div>
+        <div class="col-lg-8"><%= user.email %></div>
+        <a href="/profile/edit" style="margin-bottom: 40px;margin-top: 40px;margin-left: 14px;text-decoration: none;color: black;">
+            <button class="btn btn-warning">
+                <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+            </button>
+        </a>
     </div>
 
     <footer class="footer col-lg-12" style="text-align: center;">
