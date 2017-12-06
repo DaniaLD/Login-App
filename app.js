@@ -29,9 +29,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Setup template engine
 app.set('view engine', 'ejs');
 
-// Set static folder to public
-app.use(express.static(__dirname + '/public'));
-
 // Passport requirements
 app.use(session({
     secret: 'This is my login application.This is my login application.',
@@ -40,6 +37,9 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Set static folder to public
+app.use(express.static(__dirname + '/public'));
 
 // Connect falsh
 app.use(flash());

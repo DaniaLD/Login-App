@@ -3,7 +3,7 @@ const User = require('./models/user');
 mongoose.Promise = global.Promise;
 
 // Drop database before each run
-mongoose.connection.collections.users.drop();
+// mongoose.connection.collections.users.drop();
 
 module.exports = function(app, passport) {
 
@@ -35,10 +35,13 @@ module.exports = function(app, passport) {
         let password = req.body.password;
 
         req.checkBody('name', 'Name is required!').notEmpty();
+        req.checkBody('name', 'Name must be alphanumeric!').isAlphanumeric();
         req.checkBody('username', 'Username is required!').notEmpty();
+        req.checkBody('username', 'Username must be alphanumeric!').isAlphanumeric();
         req.checkBody('email', 'Email is required!').notEmpty();
         req.checkBody('email', 'Email is invalid!').isEmail();
         req.checkBody('password', 'Password is required!').notEmpty();
+        req.checkBody('password', 'Password must be alphanumeric!').isAlphanumeric();
         req.checkBody('confirmPassword', 'Passwords do not match!').equals(password);
 
         let errors = req.validationErrors();
@@ -81,18 +84,29 @@ module.exports = function(app, passport) {
 
     // Edit profile
     app.get('/profile/edit', isLoggedin, function(req, res) {
-       res.render('edit-profile', {user: req.user});
+       res.render('edit-profile', {user: req.user, errors: null});
     });
 
     app.post('/profile/edit', function(req, res) {
-        let query = {'email': req.user.email};
-        User.updateOne(query, {$set: {'name': req.body.name, 'username': req.body.username}} ,function(err) {
-            if(err) throw err;
-            console.log('User information changed successfully ...');
-        });
+        req.checkBody('name', 'Name is required!').notEmpty();
+        req.checkBody('name', 'Name must be alphanumeric!').isAlphanumeric();
+        req.checkBody('username', 'Username is required!').notEmpty();
+        req.checkBody('username', 'Username must be alphanumeric!').isAlphanumeric();
 
-        req.flash('success_msg', 'Changes saved successfully.');
-        res.redirect('/profile');
+        let errors = req.validationErrors();
+
+        if(errors) {
+            res.render('edit-profile', {errors: errors});
+        } else {
+            let query = {'email': req.user.email};
+            User.updateOne(query, {$set: {'name': req.body.name, 'username': req.body.username}} ,function(err) {
+                if(err) throw err;
+                console.log('User information changed successfully ...');
+            });
+
+            req.flash('success_msg', 'Changes saved successfully.');
+            res.redirect('/profile');
+        }
     });
 
     // Logout

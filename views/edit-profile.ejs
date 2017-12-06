@@ -8,6 +8,10 @@
 <div class="container">
     <% include ./partials/header.ejs%>
     <div class="row">
+        <% if(errors) {
+        errors.forEach(function(error) { %>
+        <div class="alert alert-danger col-lg-12"><%= error.msg %></div>
+        <% })} %>
         <% if(error_msg.length) { %>
         <div class="alert alert-danger col-lg-12"><%= error_msg %></div>
         <% } %>
